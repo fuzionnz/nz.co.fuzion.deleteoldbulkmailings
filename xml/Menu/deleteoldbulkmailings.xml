@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/member/updatemultipleprofile</path>
+    <page_callback>CRM_Member_Form_Task_Batch</page_callback>
+    <title>Update multiple profile</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+</menu>
