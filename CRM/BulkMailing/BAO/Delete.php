@@ -42,6 +42,7 @@ class CRM_BulkMailing_BAO_Delete {
    * @param integer $mailingId
    */
   public static function getMailingIdsFromParams($params) {
+    $limit = empty($params['limit']) ? 0 : $params['limit'];
     if (!empty($params['mailing_ids'])) {
       $mailingIds = explode(',', $params['mailing_ids']);
     }
@@ -50,7 +51,7 @@ class CRM_BulkMailing_BAO_Delete {
         'sequential' => 1,
         'return' => array("id"),
         'scheduled_date' => array('<' => $params['delivered_date_before']),
-        'options' => array('limit' => 0),
+        'options' => array('limit' => $limit),
       ));
       if (!empty($mailing['count'])) {
         $mailingIds = CRM_Utils_Array::collect('id', $mailing['values']);
@@ -95,13 +96,6 @@ class CRM_BulkMailing_BAO_Delete {
       civicrm_api3('Activity', 'delete', array(
         'id' => $activity['id'],
       ));
-      if (Civi::settings()->get('logging')) {
-        CRM_Core_DAO::executeQuery("DELETE FROM log_civicrm_activity WHERE id = {$activity['id']}");
-        CRM_Core_DAO::executeQuery("DELETE FROM log_civicrm_activity_contact WHERE activity_id = {$activity['id']}");
-      }
-    }
-    if (Civi::settings()->get('logging')) {
-      CRM_Core_DAO::executeQuery("DELETE FROM log_civicrm_mailing WHERE id = {$mailingId}");
     }
   }
 
