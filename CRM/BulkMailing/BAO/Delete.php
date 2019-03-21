@@ -57,8 +57,8 @@ class CRM_BulkMailing_BAO_Delete {
         $mailingIds = CRM_Utils_Array::collect('id', $mailing['values']);
       }
     }
-    else {
-      throw new API_Exception('Unknown Parameters', 1234);
+    elseif (!$limit) {
+      throw new API_Exception('Missing or Unknown Parameters', 1234);
     }
     return $mailingIds;
   }
