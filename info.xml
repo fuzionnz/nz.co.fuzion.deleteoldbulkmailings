@@ -2,7 +2,7 @@
 <extension key="nz.co.fuzion.deleteoldbulkmailings" type="module">
   <file>deleteoldbulkmailings</file>
   <name>Delete Old Bulk Mailings</name>
-  <description>FIXME</description>
+  <description>Delete Old Bulk Mailings</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>Jitendra Purohit</author>
@@ -18,7 +18,7 @@
   <version>1.0</version>
   <develStage>alpha</develStage>
   <compatibility>
-    <ver>4.7</ver>
+    <ver>5.40</ver>
   </compatibility>
   <comments>This is a new, undeveloped module</comments>
   <civix>

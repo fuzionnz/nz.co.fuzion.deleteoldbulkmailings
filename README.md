@@ -23,6 +23,12 @@ $ cv api Bulkmailing.Deleteoldrecords delivered_date_before=2011-01-01
 
 After installation this is also available as a [CiviCRM Scheduled Job](https://docs.civicrm.org/sysadmin/en/latest/setup/jobs/) under the name "Delete Old Bulk Mailings".
 
+Allowed params for the scheduled job -
+
+- mailing_ids = comma separated list of mailing ids to delete.
+- delivered_date_before = Delete mailings delivered before this date. Should be specified in yyyy-mm-dd format.
+- skip_activity_delete = If set, the related activities of type `Bulk Email` will not be deleted.
+
 ## License
 
 Copyright (C) 2018, Jitendra Purohit <jitendra@fuzion.co.nz>, licensed under the GNU Affero Public License 3.0. See [LICENSE.md](LICENSE.md).
