@@ -43,6 +43,7 @@ class CRM_BulkMailing_BAO_Delete {
    * @param integer $mailingId
    */
   public static function getMailingIdsFromParams($params) {
+    $limit = empty($params['limit']) ? 0 : $params['limit'];
     if (!empty($params['mailing_ids'])) {
       $mailingIds = explode(',', $params['mailing_ids']);
     }
@@ -51,14 +52,14 @@ class CRM_BulkMailing_BAO_Delete {
         'sequential' => 1,
         'return' => array("id"),
         'scheduled_date' => array('<' => $params['delivered_date_before']),
-        'options' => array('limit' => 0),
+        'options' => array('limit' => $limit),
       ));
       if (!empty($mailing['count'])) {
         $mailingIds = CRM_Utils_Array::collect('id', $mailing['values']);
       }
     }
-    else {
-      throw new API_Exception('Unknown Parameters', 1234);
+    elseif (!$limit) {
+      throw new API_Exception('Missing or Unknown Parameters', 1234);
     }
     return $mailingIds;
   }

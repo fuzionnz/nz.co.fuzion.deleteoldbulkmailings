@@ -1,5 +1,17 @@
 <?php
 /**
+ *
+ */
+function _civicrm_api3_bulkmailing_Deleteoldrecords_spec(&$spec) {
+  $spec['limit'] = array(
+    'name' => 'limit',
+    'title' => 'Limit number of mailings deleted.',
+    'api.required' => 0,
+    'type' => 1,
+  );
+}
+
+/**
  * Bulkmailing.Deleteoldrecords API
  *
  * @param array $params

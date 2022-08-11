@@ -16,7 +16,7 @@ return array (
       'run_frequency' => 'Daily',
       'api_entity' => 'Bulkmailing',
       'api_action' => 'Deleteoldrecords',
-      'parameters' => "mailing_ids=[comma separated mailing ids]\ndelivered_date_before=yyyy-mm-dd",
+      'parameters' => "limit=1\nmailing_ids=[comma separated mailing ids]\ndelivered_date_before=yyyy-mm-dd",
     ),
   ),
 );
