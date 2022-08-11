@@ -32,7 +32,8 @@ class CRM_BulkMailing_BAO_Delete {
         self::deleteEventQueueRecords($mailingEventQueueIds);
         self::deleteMailingJobRecords($jobId);
       }
-      self::deleteRecordsOfMailingId($mailingId);
+      $skipActivityDelete = $params['skip_activity_delete'] ?? FALSE;
+      self::deleteRecordsOfMailingId($mailingId, $skipActivityDelete);
     }
   }
 
@@ -66,8 +67,9 @@ class CRM_BulkMailing_BAO_Delete {
   /**
    * Delete records from mailing id
    * @param integer $mailingId
+   * @param bool $skipActivityDelete
    */
-  public static function deleteRecordsOfMailingId($mailingId) {
+  public static function deleteRecordsOfMailingId($mailingId, $skipActivityDelete = FALSE) {
     if (empty($mailingId)) {
       return;
     }
@@ -82,20 +84,29 @@ class CRM_BulkMailing_BAO_Delete {
       CRM_Core_DAO::executeQuery("DELETE FROM {$tableName} WHERE mailing_id = {$mailingId}");
     }
 
-    $activities = civicrm_api3('Activity', 'get', array(
-      'sequential' => 1,
-      'return' => array("id"),
-      'activity_type_id' => "Bulk Email",
-      'source_record_id' => $mailingId,
-      'options' => array('limit' => 0),
-    ));
-    if (empty($activities['count'])) {
-      return;
-    }
-    foreach ($activities['values'] as $activity) {
-      civicrm_api3('Activity', 'delete', array(
-        'id' => $activity['id'],
+    if (!$skipActivityDelete) {
+      $activities = civicrm_api3('Activity', 'get', array(
+        'sequential' => 1,
+        'return' => array("id"),
+        'activity_type_id' => "Bulk Email",
+        'source_record_id' => $mailingId,
+        'options' => array('limit' => 0),
       ));
+      if (empty($activities['count'])) {
+        return;
+      }
+      foreach ($activities['values'] as $activity) {
+        civicrm_api3('Activity', 'delete', array(
+          'id' => $activity['id'],
+        ));
+        if (Civi::settings()->get('logging')) {
+          CRM_Core_DAO::executeQuery("DELETE FROM log_civicrm_activity WHERE id = {$activity['id']}");
+          CRM_Core_DAO::executeQuery("DELETE FROM log_civicrm_activity_contact WHERE activity_id = {$activity['id']}");
+        }
+      }
+      if (Civi::settings()->get('logging')) {
+        CRM_Core_DAO::executeQuery("DELETE FROM log_civicrm_mailing WHERE id = {$mailingId}");
+      }
     }
   }
 
